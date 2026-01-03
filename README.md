@@ -35,9 +35,6 @@ cd /opt/cfserver && pkill dns-server && nohup ./dns-server > /dev/null 2>&1 &
    # 赋予执行权限
    chmod +x dns-server
 
-   # 首次运行设置认证令牌
-   ./dns-server -reset-token
-
    # 启动服务
    ./dns-server
 
