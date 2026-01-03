@@ -1,3 +1,24 @@
+
+
+### 部署脚本
+
+```
+curl -sS -O https://raw.githubusercontent.com/woniu336/open_shell/main/cfserver.sh && chmod +x cfserver.sh && ./cfserver.sh
+```
+
+
+修改令牌
+
+```
+cd /opt/cfserver && ./dns-server -reset-token
+```
+
+然后重启
+```
+cd /opt/cfserver && pkill dns-server && nohup ./dns-server > /dev/null 2>&1 &
+```
+
+
 ### 部署说明：
 
 1. 上传到 Linux 服务器
