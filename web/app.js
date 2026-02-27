@@ -609,6 +609,7 @@ class DNSManager {
             const checkType = monitor.check_type || 'ping';
             const checkTypeText = {
                 'ping': 'Ping检测',
+                'tcping': 'TCPing检测', // 新增字典映射
                 'http': 'HTTP检测',
                 'https': 'HTTPS检测'
             }[checkType] || checkType;

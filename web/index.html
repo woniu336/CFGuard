@@ -739,11 +739,12 @@
                             <select id="monitor-check-type" class="input-field w-full">
                                 <option value="ping">Ping</option>
                                 <option value="http">HTTP</option>
+                                <option value="tcping">TCPing</option>
                                 <option value="https">HTTPS</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">检测目标（HTTP/HTTPS 填 URL，Ping 可不填）</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">检测目标（TCPing填IP:端口，HTTP/HTTPS 填 URL，Ping 可不填）</label>
                             <input id="monitor-check-target" class="input-field w-full" placeholder="https://example.com/health 或 1.2.3.4">
                         </div>
                     </div>
@@ -979,3 +980,4 @@
     <script src="./app.js" defer></script>
 </body>
 </html>
+

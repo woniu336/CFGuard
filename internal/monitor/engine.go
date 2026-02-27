@@ -3,7 +3,9 @@ package monitor
 import (
 	"context"
 	"log"
+	"net"       // 新增：用于 TCP 连接
 	"net/http"
+	"strings"   // 新增：用于字符串处理
 	"sync"
 	"time"
 
@@ -178,6 +180,8 @@ func (e *Engine) check(m *Monitor) {
 	switch m.Config.CheckType {
 	case "http", "https":
 		success = e.checkHTTP(m)
+	case "tcping":               // 新增：TCPing 分支
+		success = e.checkTCP(m)
 	default: // ping
 		success = e.checkPing(m)
 	}
@@ -309,6 +313,34 @@ func (e *Engine) checkHTTP(m *Monitor) bool {
 	defer resp.Body.Close()
 
 	return resp.StatusCode >= 200 && resp.StatusCode < 400
+}
+
+
+func (e *Engine) checkTCP(m *Monitor) bool {
+	target := m.Config.CheckTarget
+	// 如果用户没有填写检测目标，默认使用主IP
+	if target == "" {
+		target = m.Config.OriginalIP
+	}
+
+	// TCP 检测必须有端口，如果用户没有带冒号，默认追加 :80 端口
+	if !strings.Contains(target, ":") {
+		target = target + ":80"
+	}
+
+	timeoutSeconds := m.Config.TimeoutSeconds
+	if timeoutSeconds <= 0 {
+		timeoutSeconds = 2
+	}
+
+	// 尝试建立 TCP 连接
+	conn, err := net.DialTimeout("tcp", target, time.Second*time.Duration(timeoutSeconds))
+	if err != nil {
+		log.Printf("TCP check error for %s (%s): %v", m.Config.Name, target, err)
+		return false
+	}
+	defer conn.Close()
+	return true
 }
 
 func (e *Engine) handleFailure(m *Monitor) {
